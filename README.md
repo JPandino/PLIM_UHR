@@ -6,3 +6,13 @@ short-term operation of a PSH aiming at maximizing profit trought price arbitrag
 This is an object-oriented, mixed integer linear programming model, that consider starts and stops of power units of the plant.  It is modeled in pyomo, high level optimization programming
 language, that can be use together with the Gurobi, GLPK, SCIP and IPOPT solvers. The model is capable of obtained the better final response from profit optimization expressing the
 operational planning for this.
+
+## Linear Model
+
+## Dependencies
+
+## Inputs
+
+## Outputs
+
+## Vizualization
