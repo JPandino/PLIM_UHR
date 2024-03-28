@@ -1,5 +1,5 @@
-# OOMPSH
-MIXED INTEGER LINEAR PROGRAMMING MODEL FOR PUMPED STORAGE HYDROPOWER - MILPM/PSH
+# MILPM-PSH
+MIXED INTEGER LINEAR PROGRAMMING MODEL FOR PUMPED STORAGE HYDROPOWER - MILPM-PSH
 
 Pumped Storage Hydropower (PSH) are energy storage systems that utilize upper and lower reservoirs, with reversible turbopump units, to store gravitational potential energy. This model for
 short-term operation of a PSH aiming at maximizing profit trought price arbitrage in the energy spot market. 
