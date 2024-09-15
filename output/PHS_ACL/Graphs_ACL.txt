@@ -1,0 +1,9 @@
+
+- Volume Turbinado Total: 5561.000000000023 m³;
+- Volume Bombeado Total: 0.0 m³;
+- Horas de Operação das Máquinas Somadas: 48 horas;
+- Porcentagem de Tempo em Operação: 50.0%;
+- Custo de Energia Comprada: R$ 0.0;
+- Custo total de O&M é: R$ 50137.9760000002;
+- Custo total c/ PARTIDAS e MANOBRAS OPERACIONAIS é: R$ 0.0;
+- Custo total c/ PARADAS é: R$ 0.0
