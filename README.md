@@ -1,5 +1,5 @@
-# MILPM-PSH
-MIXED INTEGER LINEAR PROGRAMMING MODEL FOR PUMPED STORAGE HYDROPOWER - MILPM-PSH
+# MILP-PSH
+MIXED INTEGER LINEAR PROGRAMMING MODEL FOR PUMPED STORAGE HYDROPOWER - MILP-PSH
 
 ## Descriptiopn
 Pumped Storage Hydropower (PSH) are energy storage systems that utilize upper and lower reservoirs, with reversible turbopump units, to store gravitational potential energy. This model for
