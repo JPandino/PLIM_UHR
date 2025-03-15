@@ -1,13 +1,10 @@
 import pandas as pd
-import numpy as np
 import pyomo.environ as pyo
 from pyomo.environ import*
-from pyomo.opt import SolverFactory
 
-def milp_optimization(uhr, As, Ai, P, VIs, VIi, VFs, VFi, receitafutura, iest):
+def milp_optimization(uhr, As, Ai, P, VIs, VIi, VFs, VFi):
 
-    steps = 24   # time steps
-    delta_t = 1  # hourly scale
+    steps = 24   # time steps (24 hours = 1 day)
 
     model = pyo.ConcreteModel()
 
@@ -55,30 +52,30 @@ def milp_optimization(uhr, As, Ai, P, VIs, VIi, VFs, VFi, receitafutura, iest):
         return pw[u,t] >= uhr["pwmin"][u] * i_pw[u,t]
     model.c2 = pyo.Constraint(model.set_unit, model.set_time, rule=min_flow_pw)
 
-    def upper_reservoir_rule(model, t):
+    def upper_reservoir_rule(model, t): # Restrição de balanço hídrico do reservatório superior
         if t == 0:
-            return vs[t] == float(VIs[0]) + uhr["C"]*(As[t] + sum([pw[u,t] for u in model.set_unit]) - sum([p[u,t] for u in model.set_unit]) - qs[t])  # Restrição para t=0
+            return vs[t] == VIs + 0.0036*(As[t] + sum([pw[u,t] for u in model.set_unit]) - sum([p[u,t] for u in model.set_unit]) - qs[t])  # Restrição para t=0
         else:
-            return vs[t] == vs[t-1] + uhr["C"]*(As[t] + sum([pw[u,t] for u in model.set_unit]) - sum([p[u,t] for u in model.set_unit]) - qs[t])
+            return vs[t] == vs[t-1] + 0.0036*(As[t] + sum([pw[u,t] for u in model.set_unit]) - sum([p[u,t] for u in model.set_unit]) - qs[t])
     model.c3 = pyo.Constraint(model.set_time, rule=upper_reservoir_rule)
 
-    def lower_reservoir_rule(model, t):
+    def lower_reservoir_rule(model, t): # Restrição de balanço hídrico do reservatório inferior
         if t == 0:
-            return vi[t] == float(VIi[0]) + uhr["C"]*(Ai[t] + sum([p[u,t] for u in model.set_unit]) + qs[t] - sum([pw[u,t] for u in model.set_unit]) - qi[t])  # Restrição para t=0
+            return vi[t] == VIi + 0.0036*(Ai[t] + sum([p[u,t] for u in model.set_unit]) + qs[t] - sum([pw[u,t] for u in model.set_unit]) - qi[t])  # Restrição para t=0
         else:
-            return vi[t] == vi[t-1] + uhr["C"]*(Ai[t] + sum([p[u,t] for u in model.set_unit]) + qs[t] - sum([pw[u,t] for u in model.set_unit]) - qi[t])
+            return vi[t] == vi[t-1] + 0.0036*(Ai[t] + sum([p[u,t] for u in model.set_unit]) + qs[t] - sum([pw[u,t] for u in model.set_unit]) - qi[t])
     model.c4 = pyo.Constraint(model.set_time, rule=lower_reservoir_rule)
 
-    model.c5 = pyo.Constraint(expr=vs[steps-1] == float(VFs[0]))
-    model.c6 = pyo.Constraint(expr=vi[steps-1] == float(VFi[0]))
+    model.c5 = pyo.Constraint(expr=vs[steps-1] == VFs)
+    model.c6 = pyo.Constraint(expr=vi[steps-1] == VFi)
 
     model.c = pyo.ConstraintList()
 
     for t in model.set_time:
         # Profit
-        model.c.add(expr=profit[t] == P[t]*(sum([p[u,t]*uhr["e_p"][u] for u in model.set_unit]) - uhr["M_acl"])*delta_t -
-            P[t]*(sum([pw[u,t]*uhr["e_pw"][u] for u in model.set_unit]))*delta_t -
-            uhr["k1"]*(sum([p[u,t]*uhr["e_p"][u] for u in model.set_unit]) + sum([pw[u,t]*uhr["e_pw"][u] for u in model.set_unit]))*delta_t -
+        model.c.add(expr=profit[t] == P[t]*(sum([p[u,t]*uhr["e_p"][u] for u in model.set_unit]) - uhr["M_acl"]) -
+            P[t]*(sum([pw[u,t]*uhr["e_pw"][u] for u in model.set_unit])) -
+            uhr["k1"]*(sum([p[u,t]*uhr["e_p"][u] for u in model.set_unit]) + sum([pw[u,t]*uhr["e_pw"][u] for u in model.set_unit])) -
             uhr["k2"]*sum([i_st[u,t] for u in model.set_unit]) - uhr["k3"]*sum([i_off[u,t] for u in model.set_unit]))
 
         for u in model.set_unit:
@@ -88,9 +85,7 @@ def milp_optimization(uhr, As, Ai, P, VIs, VIi, VFs, VFi, receitafutura, iest):
             model.c.add(expr=p[u,t] - i_p[u,t]*uhr["pmax"][u] <= 0)
 
             model.c.add(expr=i_p[u,t] + i_pw[u,t] <= 1)
-
             model.c.add(expr=i_p[u,t] + i_pw[u,t] == i_f[u,t])
-
             model.c.add(expr=i_p_pw[u,t] + i_pw_p[u,t] + i_os[u,t] == i_st[u,t])
 
             if t == 0:
@@ -118,31 +113,12 @@ def milp_optimization(uhr, As, Ai, P, VIs, VIi, VFs, VFi, receitafutura, iest):
     opt = pyo.SolverFactory("cplex")
     results = opt.solve(model)
 
-    # Inicializa DGer
-    DGer = {
-        "Receita": 0,
-        "Receita_Fut": receitafutura,
-    }
-
+    # Inicializa o Dataframe
     df_resultado = pd.DataFrame()
 
     if results.solver.termination_condition == pyo.TerminationCondition.optimal:  # Tem água para ir de VI a VF
-        # Armazena resultados do problema em um dicionário de dados
-        DGer = {
-            "Receita": pyo.value(model.obj) + receitafutura,
-            "Receita_Fut": receitafutura,
-        }
-
-        uhr = {
-            "vfs": pyo.value(model.vs[steps-1]),
-            "vfi": pyo.value(model.vi[steps-1]),
-            "vt": sum([pyo.value(model.p[u,t]) for t in range(steps) for u in model.set_unit]),
-            "vb": sum([pyo.value(model.pw[u,t]) for t in range(steps) for u in model.set_unit])
-        }
 
         # Resultado das variáveis de decisão do modelo
-        # p_value = [round(model.p[i].value, 2) for i in model.p]
-        # pw_value = [round(model.pw[i].value, 2) for i in model.pw]
         p_value = [[pyo.value(model.p[u,t]) for u in model.set_unit] for t in model.set_time]
         pw_value = [[pyo.value(model.pw[u,t]) for u in model.set_unit] for t in model.set_time]
         vs_value = [round(model.vs[i].value, 2) for i in model.vs]
@@ -166,19 +142,7 @@ def milp_optimization(uhr, As, Ai, P, VIs, VIi, VFs, VFi, receitafutura, iest):
         # i_off_value = [round(model.i_off[i].value, 2) for i in model.i_off]
 
         # Creat a Results DataFrame
-        #df = pd.DataFrame(data=[p_value, i_p_value, i_p_pw_value, pw_value, i_pw_value, i_pw_p_value, i_f_value, i_os_value, i_st_value, i_off_value, vs_value, qs_value, vi_value, qi_value]).T
-        #df.columns = ["p", "i_p", "i_p_pw", "pw", "i_pw", "i_pw_p", "i_f", "i_os", "i_st", "i_off", "vs", "qs", "vi", "qi"]
-        # df = df[:-1]
         df_resultado = pd.DataFrame(data=[p_value, pw_value, vs_value, qs_value, vi_value, qi_value, i_f_value, i_p_pw_value, i_pw_p_value, i_os_value, i_off_value]).T
         df_resultado.columns = ["p", "pw", "vs", "qs", "vi", "qi", "i_f", "i_p_pw", "i_pw_p", "i_os", "i_off"]
 
-    else:  # Não tem água para ir de VI a VF
-        uhr = {}
-
-    resultado = {
-        "DGer": DGer,
-        "UHR": uhr
-    }
-
-    # Retorna da função exportando os resultados
-    return (resultado, df_resultado)
+    return df_resultado
