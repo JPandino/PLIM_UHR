@@ -15,29 +15,29 @@ As funções de geração e consumo hidráulicas, utilizadas dentro do modelo, t
 - Pyomo
 - Gurobi (Solver)
 ## Entradas
-### Parâmetros da UHR
-  "unit": ["A", "B", "C", "D"],
-  "vsmax": 5779,
-  "vsmin": 1974,
-  "vimax": 2950,
-  "vimin": 2562,
-  "qsmax": 10030,
-  "qimax": 16200,
-  "pmax": {"A": 372, "B": 372, "C": 372, "D": 372},
-  "pwmax": {"A": 372, "B": 372, "C": 372, "D": 372},
-  "pmin": {"A": 50, "B": 50, "C": 50, "D": 50},
-  "pwmin": {"A": 50, "B": 50, "C": 50, "D": 50},
-  "e_p": {"A": 1.15*0.95, "B": 1.15*0.98, "C": 1.15*0.95, "D": 1.15*0.98},
-  "e_pw": {"A": 1.15/0.90, "B": 1.15/0.92, "C": 1.15/0.90, "D": 1.15/0.92},
-  "rp": 0.8,
-  "VIs": 3876.5,
-  "VIi": 2756,
-  "C": 0.0036,
-  "k1": 8.00,
-  "k2": 1000.,
-  "k3": 1000.,
-  "M_acl": 300.0,
-  "P_acl": 141.58,
+### Parâmetros da UHR (Exemplo)
+  - "unit": ["A", "B", "C", "D"]
+  - "vsmax": 5779
+  - "vsmin": 1974
+  - "vimax": 2950
+  - "vimin": 2562
+  - "qsmax": 10030
+  - "qimax": 16200
+  - "pmax": {"A": 372, "B": 372, "C": 372, "D": 372}
+  - "pwmax": {"A": 372, "B": 372, "C": 372, "D": 372}
+  - "pmin": {"A": 50, "B": 50, "C": 50, "D": 50}
+  - "pwmin": {"A": 50, "B": 50, "C": 50, "D": 50}
+  - "e_p": {"A": 1.15*0.95, "B": 1.15*0.98, "C": 1.15*0.95, "D": 1.15*0.98}
+  - "e_pw": {"A": 1.15/0.90, "B": 1.15/0.92, "C": 1.15/0.90, "D": 1.15/0.92}
+  - "rp": 0.8
+  - "VIs": 3876.5
+  - "VIi": 2756
+  - "C": 0.0036
+  - "k1": 8.00
+  - "k2": 1000.
+  - "k3": 1000.
+  - "M_acl": 300.0
+  - "P_acl": 141.58
 
 ### Cenários de **Preço** e **Vazão** em escala horária (Séries Temporais)
   - Vazão afluente do reservatório superior [m³/s]
