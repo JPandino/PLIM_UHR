@@ -15,37 +15,41 @@ As funções de geração e consumo hidráulicas, utilizadas dentro do modelo, t
 - Pyomo
 - Gurobi (Solver)
 ## Entradas
-### Parâmetros da UHR (Exemplo)
-  - "unit": ["A", "B", "C", "D"]
-  - "vsmax": 5779
-  - "vsmin": 1974
-  - "vimax": 2950
-  - "vimin": 2562
-  - "qsmax": 10030
-  - "qimax": 16200
-  - "pmax": {"A": 372, "B": 372, "C": 372, "D": 372}
-  - "pwmax": {"A": 372, "B": 372, "C": 372, "D": 372}
-  - "pmin": {"A": 50, "B": 50, "C": 50, "D": 50}
-  - "pwmin": {"A": 50, "B": 50, "C": 50, "D": 50}
-  - "e_p": {"A": 1.15*0.95, "B": 1.15*0.98, "C": 1.15*0.95, "D": 1.15*0.98}
-  - "e_pw": {"A": 1.15/0.90, "B": 1.15/0.92, "C": 1.15/0.90, "D": 1.15/0.92}
-  - "rp": 0.8
-  - "VIs": 3876.5
-  - "VIi": 2756
-  - "C": 0.0036
-  - "k1": 8.00
-  - "k2": 1000.
-  - "k3": 1000.
-  - "M_acl": 300.0
-  - "P_acl": 141.58
+### Parâmetros da UHR (Hipotético)
+  - Unidades Geradoras UG (unit): ["A", "B", "C", "D"]
+  - Volume Máximo do R. Superior (vsmax): 5779 hm³
+  - Volume Mínimo do R. Superior (vsmin): 1974 hm³
+  - Volume Máximo do R. Inferior (vimax): 2950 hm³
+  - Volume Mínimo do R. Inferior (vimin): 2562 hm³
+  - Vazão Defluente Máxima (qsmax): 10030 m³/s
+  - Vazão Defluente Mínima (qimax): 16200 m³/s
+  - Vazão Máxima em Modo Turbina (pmax): {"A": 372, "B": 372, "C": 372, "D": 372} m³/s
+  - Vazão Máxima em Modo Bomba (pwmax): {"A": 372, "B": 372, "C": 372, "D": 372} m³/s
+  - Vazão Mínima em Modo Turbina (pmin): {"A": 50, "B": 50, "C": 50, "D": 50} m³/s
+  - Vazão Mínima em Modo Bomba (pwmin): {"A": 50, "B": 50, "C": 50, "D": 50} m³/s
+  - Rendimento em Modo Turbina (e_p): {"A": 1.0925, "B": 1.127, "C": 1.0925, "D": 1.127} adimensional
+  - Rendimento em Modo Bomba (e_pw): {"A": 1.27, "B": 1.25, "C": 1.27, "D": 1.25} adimensional
+  - Rampa de Subida/Descida (rp): 0.8 adimensional
+  - Volume Inicial do R. Superior (VIs): 3876.5 hm³
+  - Volume Inicial do R. Inferior (VIi): 2756 hm³
+  - Volume Final do R. Superior (VFs): 3876.5 hm³
+  - Volume Final do R. Inferior (VFi): 2756 hm³
+  - Custo de O&M (k1): 8.00 R$/MWh
+  - Custo de Partida de uma UG (k2): 1000.0 R$
+  - Custo de Parada de uma UG (k3): 1000.0 R$
+  - Montante Contratado no Mercado Livre (M_acl): 300.0 MWmédio
+  - Preço da Energia Contratada no Mercado Livre (P_acl): 141.58 R$/MWh
 
-### Cenários de **Preço** e **Vazão** em escala horária (Séries Temporais)
+### Cenários de Preço e Vazão em escala horária (Séries Temporais)
   - Vazão afluente do reservatório superior [m³/s]
   - Vazão afluente do reservatório inferior [m³/s]
   - Preço da energia no mercado de curto prazo (PLD) [R$/MWh]
-  **Nota:**
-## Saídas
 
+  **Nota:** No caso da UHR trabalhar como um sistema fechado, sem afluência nos dois reservatórios ou em somente um deles, a base de dados referente a essa informação deve ser passada com valores iguais a 0 (zero).
+  
+  **Nota:** Arquivo em formato .csv
+## Saídas
+  - 
 
 ## Visualização
 Gráficos
