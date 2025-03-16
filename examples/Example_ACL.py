@@ -1,10 +1,9 @@
-from ACL import milp_optimization
+from main import milp_optimization
 
 As = [194, 200, 210, 212, 220, 300, 350, 350, 325, 300, 275, 250, 233, 230, 238, 225, 212, 208, 190, 180, 168, 150, 165, 176]
 Ai = [120, 125, 130, 145, 150, 150, 160, 128, 110, 115, 120, 123, 125, 98, 99, 100, 105, 110, 112, 125, 150, 143, 136, 160]
 P = [53.5,51.74,51.25,51.29,51.22,51.14,51.18,51.84,52.9,53.58,53.44,53.12,52.76,52.84,53.4,53.81,54.05,52.91,52.83,53.52,53.61,53.55,52.78,51.77]
-uhr = {"Nome": "UHR_ACL",
-        "unit": ["A", "B", "C", "D"],
+uhr = {"unit": ["A", "B", "C", "D"],
         "vsmax": 5779,
         "vsmin": 1974,
         "vimax": 2950,
@@ -24,18 +23,11 @@ uhr = {"Nome": "UHR_ACL",
         "VIi": 2756,
         "VFs": 3876.5,
         "VFi": 2756,
-        "C": 0.0036,
         "k1": 8.00,
-        "k2": 1000.,
+        "k2": 1000.0,
+        "k3": 1000.0,
         "M_acl": 150.0,
         "P_acl": 141.58}
 
-fob, unit, df_resultado = milp_optimization(uhr, As, Ai, P)
-vt = unit["vt"]
-vb = unit["vb"]
-
-print(f"Resultado da Função Objetivo: R${round(fob,2)}")
-print(f"Volumes turbinado: {round(vt,2)}m³/s e bombeado: {round(vb,2)}m³/s")
+df_resultado = milp_optimization(uhr, As, Ai, P, VIs, VIi, VFs, VFi)
 print(f"Resultado das Variáveis de Decisão:\n {df_resultado}")
-
-df_resultado.to_excel("df_resultado_ACL.xlsx")
