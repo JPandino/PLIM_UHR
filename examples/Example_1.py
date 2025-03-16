@@ -29,5 +29,10 @@ uhr = {"unit": ["A", "B", "C", "D"],
         "M_acl": 150.0,
         "P_acl": 141.58}
 
-df_resultado = milp_optimization(uhr, As, Ai, P, VIs, VIi, VFs, VFi)
+fob, df_resultado = milp_optimization(uhr, As, Ai, P, VIs, VIi, VFs, VFi)
+
+print(f"Resultado da Função Objetivo: R${round(fob,2)}")
 print(f"Resultado das Variáveis de Decisão:\n {df_resultado}")
+
+# Salva as variáveis de decisão excel
+df_resultado.to_excel("df_resultado.xlsx")
