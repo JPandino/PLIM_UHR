@@ -116,33 +116,31 @@ def milp_optimization(uhr, As, Ai, P, VIs, VIi, VFs, VFi):
     # Inicializa o Dataframe
     df_resultado = pd.DataFrame()
 
-    if results.solver.termination_condition == pyo.TerminationCondition.optimal:  # Tem água para ir de VI a VF
+    if results.solver.termination_condition == pyo.TerminationCondition.optimal:
+        # Resultado da função objetivo
+        fob = pyo.value(model.obj)
 
         # Resultado das variáveis de decisão do modelo
-        p_value = [[pyo.value(model.p[u,t]) for u in model.set_unit] for t in model.set_time]
-        pw_value = [[pyo.value(model.pw[u,t]) for u in model.set_unit] for t in model.set_time]
-        vs_value = [round(model.vs[i].value, 2) for i in model.vs]
-        qs_value = [round(model.qs[i].value, 2) for i in model.qs]
-        vi_value = [round(model.vi[i].value, 2) for i in model.vi]
-        qi_value = [round(model.qi[i].value, 2) for i in model.qi]
+        p_value = [[pyo.value(model.p[u, t]) for u in model.set_unit] for t in model.set_time]
+        pw_value = [[pyo.value(model.pw[u, t]) for u in model.set_unit] for t in model.set_time]
+        vs_value = [round(model.vs[u].value, 2) for u in model.vs]
+        qs_value = [round(model.qs[u].value, 2) for u in model.qs]
+        vi_value = [round(model.vi[u].value, 2) for u in model.vi]
+        qi_value = [round(model.qi[u].value, 2) for u in model.qi]
+        i_p_value = [[pyo.value(model.i_p[u, t]) for u in model.set_unit] for t in model.set_time]
+        i_pw_value = [[pyo.value(model.i_pw[u, t]) for u in model.set_unit] for t in model.set_time]      
+        i_f_value = [sum([pyo.value(model.i_f[u, t]) for u in model.set_unit]) for t in model.set_time]
+        i_p_pw_value = [[pyo.value(model.i_p_pw[u, t]) for u in model.set_unit] for t in model.set_time]
+        i_pw_p_value = [[pyo.value(model.i_pw_p[u, t]) for u in model.set_unit] for t in model.set_time]
+        i_st_value = [[pyo.value(model.i_st[u, t]) for u in model.set_unit] for t in model.set_time]
+        i_off_value = [[pyo.value(model.i_off[u, t]) for u in model.set_unit] for t in model.set_time]
+       
+        # DataFrame com as variáveis de decisão
+        df_resultado = pd.DataFrame(data=[p_value, pw_value, vs_value, qs_value, vi_value, qi_value, i_p_value, i_pw_value, i_f_value, i_p_pw_value, i_pw_p_value, i_st_value, i_off_value]).T
+        df_resultado.columns = ["p", "pw", "vs", "qs", "vi", "qi", "i_p", "i_pw", "i_f", "i_p_pw", "i_pw_p", "i_st", "i_off"]
 
-        i_f_value = [sum([pyo.value(model.i_f[u,t]) for u in model.set_unit]) for t in model.set_time]
-        i_p_pw_value = [[pyo.value(model.i_p_pw[u,t]) for u in model.set_unit] for t in model.set_time]
-        i_pw_p_value = [[pyo.value(model.i_pw_p[u,t]) for u in model.set_unit] for t in model.set_time]
-        i_os_value = [[pyo.value(model.i_os[u,t]) for u in model.set_unit] for t in model.set_time]
-        i_off_value = [[pyo.value(model.i_off[u,t]) for u in model.set_unit] for t in model.set_time]
+        else:
+            fob = None
+            print("O problema não tem solução viável!")
 
-        # i_p_value = [round(model.i_p[i].value, 2) for i in model.i_p]
-        # i_p_pw_value = [round(model.i_p_pw[i].value, 2) for i in model.i_p_pw]
-        # i_pw_value = [round(model.i_pw[i].value, 2) for i in model.i_pw]
-        # i_pw_p_value = [round(model.i_pw_p[i].value, 2) for i in model.i_pw_p]
-        # i_f_value = [round(model.i_f[i].value, 2) for i in model.i_f]
-        # i_os_value = [round(model.i_os[i].value, 2) for i in model.i_os]
-        # i_st_value = [round(model.i_st[i].value, 2) for i in model.i_st]
-        # i_off_value = [round(model.i_off[i].value, 2) for i in model.i_off]
-
-        # Creat a Results DataFrame
-        df_resultado = pd.DataFrame(data=[p_value, pw_value, vs_value, qs_value, vi_value, qi_value, i_f_value, i_p_pw_value, i_pw_p_value, i_os_value, i_off_value]).T
-        df_resultado.columns = ["p", "pw", "vs", "qs", "vi", "qi", "i_f", "i_p_pw", "i_pw_p", "i_os", "i_off"]
-
-    return df_resultado
+    return fob, df_resultado
