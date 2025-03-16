@@ -3,7 +3,7 @@ MODELO DE PROGRAMAÇÃO LINEAR INTEIRA MISTA PARA USINAS HIDRELÉTRICAS REVERSÍ
 
 ## Descrição
 Uma Usina Hidrelétrica Reversível (UHR) funciona como um Sistemas de Armazenamento de Energia (SAE) que trabalha com dois reservatórios, um superior e um inferior, juntamente com turbinas reversíveis, para armazenar energia potencial gravitacional. O presente modelo foi desenvolvido buscando maximizar o lucro de uma UHR por meio da arbitragem de preços no mercado spot (curto prazo), através da operação de curto prazo.
-Este é um modelo de programação linear inteira mista, orientado a objetos, que considera partidas e paradas de unidades geradoras da UHR. É modelado com a linguagem de programação Python, em conjunto com a biblioteca Pyomo, fazendo uso de uma linguagem de programação de otimização de alto nível, que pode ser usada junto com os solucionadores Gurobi, GLPK, SCIP e IPOPT.
+Este é um modelo de programação linear inteira mista, orientado a objetos, que considera partidas e paradas de unidades geradoras da UHR. É modelado com a linguagem de programação Python, em conjunto com a biblioteca Pyomo, fazendo uso de uma linguagem de programação de otimização de alto nível, que pode ser usada junto com os solucionadores CPLEX, Gurobi, GLPK, SCIP e IPOPT.
 O modelo é capaz de obter a melhor resposta final da otimização do lucro expressando o planejamento operacional **mensal** para isso.
 
 ## Modelo Linear
@@ -13,7 +13,8 @@ As funções de geração e consumo hidráulicas, utilizadas dentro do modelo, t
 - Pandas
 - Numpy
 - Pyomo
-- Gurobi (Solver)
+- CPLEX (Solver)
+
 ## Entradas
 ### Parâmetros da UHR (Hipotético)
   - Unidades Geradoras UG (unit): ["A", "B", "C", "D"]
@@ -49,7 +50,10 @@ As funções de geração e consumo hidráulicas, utilizadas dentro do modelo, t
   
   **Nota:** Arquivo em formato .csv
 ## Saídas
-  - 
+  - Vazão Turbinada e Bombeada
+  - Partidas e Paradas
+  - Mudanças no Modo de Operação (turbina e bomba)
+  - Volume Vertido
+  - Custos
+  - Receitas
 
-## Visualização
-Gráficos
