@@ -58,3 +58,6 @@ As funções de geração e consumo hidráulicas, utilizadas dentro do modelo, t
   - Custos
   - Receitas
 
+## Visualização
+![receita_UHR](https://github.com/user-attachments/assets/6aadd56c-b3cf-46dc-8c79-3e1f2fbd3bb2)
+
