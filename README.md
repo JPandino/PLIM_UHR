@@ -2,9 +2,9 @@
 MODELO DE PROGRAMAÇÃO LINEAR INTEIRA MISTA PARA USINAS HIDRELÉTRICAS REVERSÍVEIS - PLIM-UHR
 
 ## Descrição
-Uma Usina Hidrelétrica Reversível (UHR) funciona como um Sistemas de Armazenamento de Energia (SAE) que trabalha com dois reservatórios, um superior e um inferior, juntamente com turbinas reversíveis, para armazenar energia potencial gravitacional. O presente modelo foi desenvolvido buscando maximizar o lucro de uma UHR por meio da arbitragem de preços no mercado spot (curto prazo), através da operação de curto prazo.
-Este é um modelo de programação linear inteira mista, orientado a objetos, que considera partidas e paradas de unidades geradoras da UHR. É modelado com a linguagem de programação Python, em conjunto com a biblioteca Pyomo, fazendo uso de uma linguagem de programação de otimização de alto nível, que pode ser usada junto com os solucionadores CPLEX, Gurobi, GLPK, SCIP e IPOPT.
-O modelo é capaz de encontrar o melhor resultado, em termos de receita, para o **planejamento operacional diário** de uma UHR no Mercado de Curto Prazo (MCP) e no Ambiente de Contratação Livre (ACL).
+Uma Usina Hidrelétrica Reversível (UHR) funciona como um Sistemas de Armazenamento de Energia (SAE) que trabalha com dois reservatórios, um superior e um inferior, juntamente com turbinas reversíveis, para armazenar energia potencial gravitacional. O presente modelo foi desenvolvido buscando maximizar o lucro de uma UHR por meio da arbitragem de preços no mercado spot (curto prazo), através da operação de curto prazo.<br>
+Este é um modelo de programação linear inteira mista, orientado a objetos, que considera partidas e paradas de unidades geradoras da UHR. É modelado com a linguagem de programação Python, em conjunto com a biblioteca Pyomo, fazendo uso de uma linguagem de programação de otimização de alto nível, que pode ser usada junto com os solucionadores CPLEX, Gurobi, GLPK, SCIP e IPOPT.<br>
+O código é capaz de encontrar o melhor resultado, em termos de receita, para o **planejamento operacional diário** de uma UHR no Mercado de Curto Prazo (MCP) e no Ambiente de Contratação Livre (ACL).
 
 **Nota:** Embora seja possível expandir o horizonte de planejamento para além de 24 horas, a elevada complexidade inerente a problemas com variáveis inteiras mistas e múltiplos estágios frequentemente torna inviável a obtenção de uma solução ótima utilizando solucionadores comerciais.
 
